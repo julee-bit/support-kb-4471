@@ -4,7 +4,8 @@ title: '#4471 was three problems, not one'
 owner: support desk
 status: accepted
 reviewed: 2026-11-01
-signature: Julee Peterson + Claude
+signature: v1.eyJzdWIiOiIxMzQ0NiIsImF1ZCI6ImNoYWxsZW5nZTp3aGF0LWl0LXNob3dzIiwiaWF0IjoxNzkzNTY2MjQyLCJleHAiOjE3OTM2NTI2NDJ9.TvjTCvcVm__LtHkvzV3Y7Red_QWTPNFpFOlj3Tao5us
+author: Julee Peterson + Claude
 ---
 
 <script>
