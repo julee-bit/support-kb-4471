@@ -1,63 +1,63 @@
 ---
 layout: runbook
-title: '#4471 is three problems, not one'
+title: '#4471 was three problems, not one'
 owner: support desk
-status: proposed
+status: accepted
 reviewed: 2026-11-01
 signature: Julee Peterson + Claude
 ---
 
 <script>
-  import SplitTable from '#lib/kb/SplitTable.svelte';
   import CauseTable from '#lib/kb/CauseTable.svelte';
   import Callout from '#lib/kb/Callout.svelte';
   import RenderStamp from '#lib/kb/RenderStamp.svelte';
 
   const repo = 'https://github.com/julee-bit/support-kb-4471/issues';
-  const issues = { parser: `${repo}/1`, hint: `${repo}/2`, 'one-day': `${repo}/3` };
 </script>
 
-[#4471](/kb/incidents/4471) is marked known: one issue, one fix queued. The reports in it tell a
-different story. They were merged by subject line ([decision 0001](/kb/decisions/0001-dedupe-by-subject)),
-and nobody had to read the body. Read the bodies, and three problems come out, each with its own
-fix. The parser fix that is queued closes only the first.
+[#4471](/kb/incidents/4471) was marked known: one issue, one fix queued. Its reports were merged
+by subject line ([decision 0001](/kb/decisions/0001-dedupe-by-subject)), so nobody had to read
+the body. Read the bodies, and three problems come out, each with its own fix. Engineering closed
+#4471 on 5 October. That closed two of them.
 
-## The split
+## The count
 
-<SplitTable ticket={4471} {issues} />
-
-- **`parser`**: the shared parser reads every date month first. Every tenant on file writes the
-  day first, so their dates come out flipped: "Booked for 2 March. The invite says 3 February."
-- **`hint`**: tenants on `booking-v3` show the hint `MM/DD/YYYY` under the date field. Their
-  people type what the hint says, and the form reads it the tenant's way. Same flip, different
-  bug: fixing the parser leaves it in place. Only reports sent through the form.
-- **`one-day`**: the date moves by exactly one day, not a month. "Client in Lisbon got Tuesday.
-  Client in Toronto got Monday. Same meeting." This looks like a time zone, not a parser. The
-  desk spotted these in its notes, but the cause table files them under `parser` by tenant,
-  so they disappear into the biggest row.
-
-<Callout kind="warn">
-#4471 is not known. Two of its three problems have no ticket and no fix. Each now has its own
-ticket, linked in the table.
-</Callout>
-
-## How #4471 reads today
-
-The desk's own table, for comparison. It counts the one-day moves under `parser` and footnotes
-them.
+The desk's own view, as exported. Every number on this page comes from it.
 
 <CauseTable ticket={4471} />
 
+## The three problems
+
+| problem | what reporters see | ticket | state |
+|---|---|---|---|
+| `parser` | Day and month swapped: "Booked for 2 March. The invite says 3 February." | <a href="{repo}/1">#1</a> | fixed: parse dd/mm for eu locales |
+| `hint` | The same swap, only through the `booking-v3` form, which shows `MM/DD/YYYY` to day-first tenants | <a href="{repo}/2">#2</a> | won't fix: `booking-v3` retired |
+| one-day move | The date moves by one day, not a month: "Client in Lisbon got Tuesday. Client in Toronto got Monday." | <a href="{repo}/3">#3</a> | **open** |
+
+- **`parser`**: the shared parser read every date month first. Every tenant on file writes the
+  day first, so their dates came out flipped.
+- **`hint`**: people typed what the form's hint told them, month first, and the form read it the
+  tenant's way. Fixing the parser left it in place. Retiring the form ends it.
+- **one-day move**: these are the reports the table above footnotes as read as a one-day move.
+  The desk files them under `parser` by tenant, so they sit inside the biggest row. They look
+  like a time zone, not a parser, and neither change on 5 October touches them.
+
+<Callout kind="warn">
+#4471 is closed, but not every report in it is solved. The one-day moves have their own ticket,
+#3, and no fix yet. Send new one-day reports there, not to #4471.
+</Callout>
+
 ## Why the merge hid it
 
-- Subject lines don't name the cause. The same subject ("Date is wrong") covers all three.
+- Subject lines don't name the cause. "Date is wrong" covers all three problems.
 - Intake tags guess from the reporter's browser, not the tenant. The "tagged as" column above
   shows how often they disagree with the cause.
 - One ticket with a count reads as one bug. A count says how loud, not how many.
 
-## Next
+## Next time
 
-- Split by cause, not subject, before a ticket is marked known: run the [triage explorer](/kb/triage/dedupe).
-- Read a sample of bodies in every big ticket. A handful of reports was enough to show a third bug.
+- Split a big ticket by cause, not subject, before marking it known: try the
+  [triage explorer](/kb/triage/dedupe).
+- Read a sample of bodies in every big ticket. A handful of reports was enough to find a third bug.
 
 <RenderStamp {signature} />
